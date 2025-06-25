@@ -5,7 +5,7 @@ A Proof of Concept for CDC pipeline using Debezium and Replica PostgreSQL
 ## 🧠 Overview
 
 This POC demonstrates:
-- [✔] How to set up [components, e.g., Debezium with PostgreSQL-primary aand replica, Debezium, kafka,  schema-registry, sqlServer as destination]
+- [✔] How to set up [components: Debezium with PostgreSQL-primary and replica, Debezium, kafka,  schema-registry, sqlServer as destination]
 - [✔] Data flow from source to sink using [tools, e.g., Kafka Connect, JDBC Sink]
 - [✔] Execuet Stored Procedure to handle the history changes like scd type 2.
 
