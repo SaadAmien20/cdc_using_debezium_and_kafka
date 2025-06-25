@@ -1,0 +1,31 @@
+{
+  "name": "sqlserver-scd2-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "topics": "replica.public.customers",
+
+    "connection.url": "jdbc:sqlserver://host.docker.internal:1433;databaseName=kafkacdc;encrypt=false",
+    "connection.user": "kafka_user",
+    "connection.password": "1234",
+
+    "table.name.format": "cdc_customers_events",
+    "insert.mode": "insert",
+    "pk.mode": "none",  
+    "auto.create": "true",
+    "auto.evolve": "true",
+
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+
+   "transforms": "unwrap,dropSourceVersion",
+   "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+   "transforms.dropSourceVersion.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+   "transforms.dropSourceVersion.blacklist": "source.version,source.connector",
+   "transforms.unwrap.drop.tombstones": "false",
+   "transforms.unwrap.delete.handling.mode": "rewrite",
+   "transforms.unwrap.add.fields": "op,source.ts_ms",
+   "transforms.unwrap.include.fields": "before,after,op,source.ts_ms"
+
+  }
+}
