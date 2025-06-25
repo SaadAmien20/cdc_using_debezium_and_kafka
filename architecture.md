@@ -7,33 +7,36 @@
 **Deploy Command:**
 ```bash
 curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" --data @debezium-postgres-connection.json
-
-Debezium Sink Configuration for SQL Server
-Connector Config:
+```
+**Debezium Sink Configuration for SQL Server**
+***Connector Config:***
 [sqlserver-sink-connector.json](./setup/sqlserver-sink-connector.json)
-
 ```bash
 curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" --data @sqlserver-sink-connector.json
-
-🔍 Kafka Debugging Commands
-List Topics:
+```
+**🔍 Kafka Debugging Commands**
+***List Topics:***
+```bash
 docker exec -it kafka-cdc-kafka-1 /usr/bin/kafka-topics --list --bootstrap-server localhost:9092
-View Messages in Topic:
-
+```
+** View Messages in Topic:**
+```bash
 docker run --rm --network container:kafka-cdc-kafka-1 confluentinc/cp-enterprise-kafka:5.5.3 \
   kafka-console-consumer --bootstrap-server localhost:9092 \
   --topic replica.public.customers --from-beginning --max-messages 5
-
-Delete Connector:
+```
+***Delete Connector:***
+```bash
 curl -X DELETE http://localhost:8083/connectors/sqlserver-sink
-
-Restart Connector:
+```
+**Restart Connector:**
+```bash
 curl -X POST http://localhost:8083/connectors/sqlserver-scd2-sink/restart
-
-🧾 Track Changes (SCD Type 2)
-💡 Note: Deletions are hard deletes in production app.
-Step 1: Create Dimension Table
-
+```
+**🧾 Track Changes (SCD Type 2)**
+***💡 Note: Deletions are hard deletes in production app.***
+**Step 1: Create Dimension Table**
+```sql
 CREATE TABLE [dbo].[customer_Dim](
 	[scd_id] [int] IDENTITY(1,1) NOT NULL,
 	[id] [int] NOT NULL,
@@ -45,7 +48,6 @@ CREATE TABLE [dbo].[customer_Dim](
 	  NULL,
 	[__source_ts_ms] [bigint] NULL
 );
-
 
 Step 2: Merge Logic Stored Procedure
 CREATE OR ALTER PROCEDURE dbo.merge_customer_scd
@@ -60,9 +62,8 @@ BEGIN
     -- Truncate staging
     -- (Code provided above in full)
 END;
-
 Step 3: Execute Procedure
 EXEC merge_customer_scd;
-
+```
 
 
